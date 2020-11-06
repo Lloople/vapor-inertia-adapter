@@ -10,21 +10,21 @@ final class InertiaMiddlewareTest: XCTestCase {
     override func setUpWithError() throws {
         app = Application(.testing)
         
-        let routes = app.grouped(InertiaMiddleware())
+        app.middleware.use(InertiaMiddleware())
         
-        routes.get("ok") { req -> Response in
+        app.get("ok") { req -> Response in
             return Response(status: .ok)
         }
         
-        routes.put("found") { req -> Response in
+        app.put("found") { req -> Response in
             return Response(status: .found)
         }
         
-        routes.get("found") { req -> Response in
+        app.get("found") { req -> Response in
             return Response(status: .found)
         }
         
-        routes.put("not-modified") { req -> Response in
+        app.put("not-modified") { req -> Response in
             return Response(status: .notModified)
         }
     }

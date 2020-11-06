@@ -6,14 +6,13 @@ public struct InertiaMiddleware: Middleware {
     
     public func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
         
-        // TODO: Share errors
+        // TODO: Share errors, need to learn about Vapor's validation first
         
         // TODO: Configure root view
-        
-        // TODO: Configure version
-        
+                
         return next.respond(to: request).map { response in
             if request.inertiaExpired(version: Inertia.instance.version) {
+                
                 response.status = .conflict
                 response.headers.add(name: "X-Inertia-Location", value: request.url.string)
                 response.body = .empty
