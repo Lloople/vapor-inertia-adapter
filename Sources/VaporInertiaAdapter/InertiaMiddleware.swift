@@ -11,11 +11,9 @@ public struct InertiaMiddleware: Middleware {
         // TODO: Configure root view
                 
         return next.respond(to: request).map { response in
+            
             if request.inertiaExpired(version: Inertia.instance.version) {
-                
-                response.status = .conflict
-                response.headers.add(name: "X-Inertia-Location", value: request.url.string)
-                response.body = .empty
+                return Inertia.instance.location(url: request.url.string)
             }
             
             if self.shouldChangeRedirectStatusCode(request: request, response: response) {

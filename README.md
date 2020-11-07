@@ -42,6 +42,14 @@ targets: [
 
 ## Usage
 
+### Middleware
+
+This package provides a middleware that checks the responses before returning them to the client for further adjustements. You should apply this middleware to all your application routes in **configure.swift**:
+
+```swift
+app.middleware.use(InertiaMiddleware())
+```
+
 ### Version
 
 Inertia will reload the whole page when it detects the assets changed. This is handled by a version token sent from the server. When the client detects that the previous token it has is different from the one returned from the server, it knows it's time to download the assets again.
@@ -53,11 +61,3 @@ Inertia.instance.version = "v1.0.1"
 ```
 
 Ideally, you should use some kind of hash generated via your assets files, or change it manually in each update of your CSS or JS files.
-
-### Middleware
-
-This package provides a middleware that checks the responses before returning them to the client for further adjustements. You should apply this middleware to all your application routes in **configure.swift**:
-
-```swift
-app.middleware.use(InertiaMiddleware())
-```
