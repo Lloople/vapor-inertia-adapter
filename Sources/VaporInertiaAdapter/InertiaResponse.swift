@@ -13,20 +13,24 @@ public class InertiaResponse {
         self.version = version
     }
     
-    public func toResponse(req: Request) throws -> EventLoopFuture<Response> {
+    public func toResponse(for request: Request) throws -> EventLoopFuture<Response> {
         
-        let context = InertiaContext(component: try self.component.toJson())
+        let context = InertiaContext(
+            component: try self.component.toJson(),
+            version: self.version,
+            url: request.url.string
+        )
         
-        if req.isInertia() {
+        if request.isInertia() {
             return Response(
                 status: .ok,
                 headers: .init([("Vary", "Accept"), ("X-Inertia", "true")]),
                 body: .init(data: try JSONSerialization.data(withJSONObject: context))
-            ).encodeResponse(for: req)
+            ).encodeResponse(for: request)
         }
         
-        return req.view.render(self.rootView, context)
-            .flatMap { $0.encodeResponse(for: req) }
+        return request.view.render(self.rootView, context)
+            .flatMap { $0.encodeResponse(for: request) }
     }
     
 }
