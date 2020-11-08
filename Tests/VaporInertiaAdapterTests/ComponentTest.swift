@@ -14,9 +14,9 @@ class ComponentTest: XCTestCase {
         let component = self.createComponent()
         
         let json = component.toJson() as? [String: AnyObject]
-        let properties = json?["properties"] as? [String: AnyObject]
+        let properties = json?["props"] as? [String: AnyObject]
         
-        XCTAssertEqual(json?["name"] as? String, "FirstComponent")
+        XCTAssertEqual(json?["component"] as? String, "FirstComponent")
         
         XCTAssertEqual(properties?["name"] as? String, "John")
         XCTAssertEqual(properties?["age"] as? Int, 34)
@@ -34,7 +34,7 @@ class ComponentTest: XCTestCase {
         XCTAssertEqual(component.getProperties().count, 1)
         
         let json = component.toJson() as? [String: AnyObject]
-        let properties = json?["properties"] as? [String: AnyObject]
+        let properties = json?["props"] as? [String: AnyObject]
         
         XCTAssertEqual(properties?["name"] as? String, "Alfred")
 
