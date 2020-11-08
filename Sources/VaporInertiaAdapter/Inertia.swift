@@ -20,14 +20,16 @@ public class Inertia {
         return "<div id='app' data-page='\(content)'></div>"
     }
     
-    public func share(key: String, value: Encodable) -> Self {
+    public func share(key: String, value: Encodable) {
         self.shared[key] = value
-        
-        return self
     }
     
     public func getShared(key: String) -> Any? {
         return self.shared[key]
+    }
+    
+    public func getAllShared() -> [String:Any] {
+        return self.shared
     }
     
     public func location(url: String) -> Response {

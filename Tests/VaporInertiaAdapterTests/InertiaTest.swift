@@ -26,4 +26,19 @@ class InertiaTest: XCTestCase {
         
         XCTAssertEqual(container, "<div id='app' data-page='\(content)'></div>")
     }
+    
+    func testCanShareVariables() {
+        Inertia.instance().share(key: "language", value: "en")
+        
+        XCTAssertEqual(1, Inertia.instance().getAllShared().count)
+        
+        XCTAssertEqual(Inertia.instance().getShared(key: "language") as? String, "en")
+    }
+    
+    func testCanCreateRedirection() {
+        let response = Inertia.instance().location(url: "https://myurl.com")
+        
+        XCTAssertEqual(response.status, .conflict)
+        XCTAssertEqual(response.headers.first(name:"X-Inertia-Location"), "https://myurl.com")
+    }
 }
