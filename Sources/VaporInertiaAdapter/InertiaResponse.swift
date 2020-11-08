@@ -1,3 +1,5 @@
+import Foundation
+import Vapor
 
 public class InertiaResponse {
     
@@ -9,6 +11,22 @@ public class InertiaResponse {
         self.component = component
         self.rootView = rootView
         self.version = version
+    }
+    
+    public func toResponse(req: Request) throws -> EventLoopFuture<Response> {
+        
+        let context = InertiaContext(component: try self.component.toJson())
+        
+        if req.isInertia() {
+            return Response(
+                status: .ok,
+                headers: .init([("Vary", "Accept"), ("X-Inertia", "true")]),
+                body: .init(data: try JSONSerialization.data(withJSONObject: context))
+            ).encodeResponse(for: req)
+        }
+        
+        return req.view.render(self.rootView, context)
+            .flatMap { $0.encodeResponse(for: req) }
     }
     
 }

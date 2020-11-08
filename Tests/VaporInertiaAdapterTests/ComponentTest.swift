@@ -10,12 +10,13 @@ class ComponentTest: XCTestCase {
         XCTAssertEqual(c.getProperties().count, 3)
     }
     
-    func testComponentCanBeConvertedToJson() {
+    func testComponentCanBeConvertedToJson() throws {
         let component = self.createComponent()
         
-        let json = component.toJson() as? [String: AnyObject]
-        let properties = json?["props"] as? [String: AnyObject]
+        let json = try JSONSerialization.jsonObject(with: component.toJson(), options: []) as? [String:Any]
         
+        let properties = json?["props"] as? [String: Any]
+
         XCTAssertEqual(json?["component"] as? String, "FirstComponent")
         
         XCTAssertEqual(properties?["name"] as? String, "John")
@@ -24,7 +25,7 @@ class ComponentTest: XCTestCase {
     }
     
 
-    func testPropertiesCanBeAddedToComponent() {
+    func testPropertiesCanBeAddedToComponent() throws {
         let component = Component(name: "FirstComponent")
 
         XCTAssertEqual(component.getProperties().count, 0)
@@ -33,7 +34,7 @@ class ComponentTest: XCTestCase {
 
         XCTAssertEqual(component.getProperties().count, 1)
         
-        let json = component.toJson() as? [String: AnyObject]
+        let json = try JSONSerialization.jsonObject(with: component.toJson(), options: []) as? [String:Any]
         let properties = json?["props"] as? [String: AnyObject]
         
         XCTAssertEqual(properties?["name"] as? String, "Alfred")

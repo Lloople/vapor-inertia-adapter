@@ -21,7 +21,7 @@ class InertiaTest: XCTestCase {
     
     func testContainerCanBeRenderer() throws {
         let component = Component(name: "Event/Show", properties: ["name": "Climate Change Global Action"])
-        let content = try JSONSerialization.data(withJSONObject: component.toJson())
+        let content = try component.toJson()
         let container = Inertia.instance().container(content:content)
         
         XCTAssertEqual(container, "<div id='app' data-page='\(content)'></div>")
