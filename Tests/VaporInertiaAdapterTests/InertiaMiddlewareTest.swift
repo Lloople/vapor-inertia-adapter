@@ -72,7 +72,7 @@ final class InertiaMiddlewareTest: XCTestCase {
     
     func testDoesNotReplaceFoundIfTheMethodIsNotCorrect() throws {
         
-        Inertia.instance.version = "testing"
+        Inertia.instance().version = "testing"
         
         try app.test(.GET, "found", beforeRequest: { request in
             request.headers.add(name: "X-inertia", value: "1")

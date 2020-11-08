@@ -22,10 +22,10 @@ public class Component {
         return self.properties
     }
     
-    public func toJson() throws -> Any {
+    public func toJson() -> Any {
         return [
-            "name": self.name,
-            "properties": self.properties
+            "component": self.name,
+            "props": self.properties
         ]
     }
 }

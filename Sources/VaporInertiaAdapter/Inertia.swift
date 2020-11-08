@@ -2,8 +2,9 @@ import Vapor
 
 public class Inertia {
     
-    public static let instance = Inertia()
+    static let inertiaInstance = Inertia()
     
+    var shared: [String: Any] = [:]
     
     var rootView: String = "index"
     
@@ -11,8 +12,22 @@ public class Inertia {
     
     private init() {}
     
-    public func container(content: String) -> String {
+    public static func instance() -> Inertia {
+        return inertiaInstance
+    }
+    
+    public func container(content: Data) -> String {
         return "<div id='app' data-page='\(content)'></div>"
+    }
+    
+    public func share(key: String, value: Encodable) -> Self {
+        self.shared[key] = value
+        
+        return self
+    }
+    
+    public func getShared(key: String) -> Any? {
+        return self.shared[key]
     }
     
     public func location(url: String) -> Response {
@@ -25,7 +40,7 @@ public class Inertia {
     
     public func render(component: Component) -> InertiaResponse {
 
-        // TODO: Add shared properties to the component
+        component.properties.merge(self.shared) { (_, shared) in shared }
         
         return InertiaResponse(
             component: component,

@@ -57,7 +57,33 @@ Inertia will reload the whole page when it detects the assets changed. This is h
 This version token should be configured in **configure.swift**:
 
 ```swift
-Inertia.instance.version = "v1.0.1"
+Inertia.instance().version = "v1.0.1"
 ```
 
 Ideally, you should use some kind of hash generated via your assets files, or change it manually in each update of your CSS or JS files.
+
+### Creating responses
+
+> TODO: Explain what `Inertia.instance().render` will do: view or json
+
+```swift
+
+struct EventsController
+public func show(req: Request) -> EventLoopFuture<Response> {
+
+    return Event.query(on: req.db)
+        .filter(\.$id == req.parameters.get("eventId", as: Int)
+        .first()
+        .unwrap(or: Abort(.notFound))
+        .map { event in
+            return Inertia.instance().render(
+                Component(
+                    name: "Event/Show", 
+                    properties: [
+                        "event" : event,
+                        "categories": ["Social", "Climate Change", "Studies"]
+                    ]
+                )
+        }
+}
+```
