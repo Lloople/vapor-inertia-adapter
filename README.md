@@ -76,14 +76,16 @@ public func show(req: Request) -> EventLoopFuture<Response> {
         .first()
         .unwrap(or: Abort(.notFound))
         .map { event in
-            return Inertia.instance().render(
-                Component(
-                    name: "Event/Show", 
-                    properties: [
-                        "event" : event,
-                        "categories": ["Social", "Climate Change", "Studies"]
-                    ]
-                )
+        
+            let component = Component(
+                name: "Event/Show",
+                properties: [
+                    "event": event,
+                    "categories": ["Social", "Climate Change", "Studies"]
+                ]
+            )
+            
+            return Inertia.instance().render(for: req, with: component)
         }
 }
 ```

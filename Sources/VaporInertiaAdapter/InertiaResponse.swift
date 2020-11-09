@@ -1,4 +1,3 @@
-import Foundation
 import Vapor
 
 public class InertiaResponse {
@@ -22,11 +21,12 @@ public class InertiaResponse {
         )
         
         if request.isInertia() {
-            return Response(
-                status: .ok,
-                headers: .init([("Vary", "Accept"), ("X-Inertia", "true")]),
-                body: .init(data: try JSONSerialization.data(withJSONObject: context))
-            ).encodeResponse(for: request)
+            
+            let response = Response(status: .ok, headers: .init([("Vary", "Accept"), ("X-Inertia", "true")]))
+            
+            try response.content.encode(context, as: .json)
+            
+            return request.eventLoop.future(response)
         }
         
         return request.view.render(self.rootView, context)

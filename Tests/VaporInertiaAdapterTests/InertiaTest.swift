@@ -1,8 +1,24 @@
-import XCTest
 import VaporInertiaAdapter
-import Vapor
+import XCTVapor
 
 class InertiaTest: XCTestCase {
+    
+    var app: Application!
+    
+    override func setUpWithError() throws {
+        app = Application(.testing)
+        
+        app.get("test") { req throws -> EventLoopFuture<Response> in
+            
+            let component = Component(name: "MyComponent", properties: ["alive": true])
+            
+            return try Inertia.instance().render(for: req, with: component)
+        }
+    }
+    
+    override func tearDownWithError() throws {
+        self.app.shutdown()
+    }
     
     func testSingletonPatternWorks() {
         let inertia = Inertia.instance()
@@ -40,5 +56,16 @@ class InertiaTest: XCTestCase {
         
         XCTAssertEqual(response.status, .conflict)
         XCTAssertEqual(response.headers.first(name:"X-Inertia-Location"), "https://myurl.com")
+    }
+    
+    func testCanRenderComponent() throws {
+        
+        try self.app.test(.GET, "test", beforeRequest: { request in
+            request.headers.add(name: "X-Inertia", value: "true")
+        }, afterResponse: { response in
+            XCTAssertEqual(response.status, .ok)
+            XCTAssertEqual(response.headers.first(name: "Vary"), "Accept")
+            XCTAssertEqual(response.headers.first(name: "X-Inertia"), "true")
+        })
     }
 }
