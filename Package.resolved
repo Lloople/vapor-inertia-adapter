@@ -33,17 +33,17 @@
         "repositoryURL": "https://github.com/vapor/leaf.git",
         "state": {
           "branch": null,
-          "revision": "a8348b682ec14a863cc470a2da8f0ebc262c6088",
-          "version": "4.0.0-tau.1"
+          "revision": "66060b77f6f234a48761d594d055ce981d411dfc",
+          "version": "4.0.0"
         }
       },
       {
         "package": "leaf-kit",
-        "repositoryURL": "https://github.com/vapor/leaf-kit",
+        "repositoryURL": "https://github.com/vapor/leaf-kit.git",
         "state": {
           "branch": null,
-          "revision": "8b965e6e2eadfe5914ea133669368aceb2b89ccb",
-          "version": "1.0.0-tau.1.1"
+          "revision": "0f0866e0709c685262dc4b6e726f2d424e37b12c",
+          "version": "1.0.0"
         }
       },
       {
