@@ -19,7 +19,7 @@ let package = Package(
             .product(name: "Leaf", package: "leaf"),
         ]),
         .testTarget(name: "VaporInertiaAdapterTests", dependencies: [
-            .target(name: "VaporInertiaAdapter"),
+            "VaporInertiaAdapter",
             .product(name: "XCTVapor", package: "vapor"),
         ]),
     ]
