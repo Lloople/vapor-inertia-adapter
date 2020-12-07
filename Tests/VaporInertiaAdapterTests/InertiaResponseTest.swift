@@ -8,12 +8,12 @@ class InertiaResponseTest: XCTestCase {
     override func setUpWithError() throws {
         app = Application(.testing)
         
-        app.get("test") { req throws -> EventLoopFuture<Response> in
+        app.get("test") { req -> EventLoopFuture<Response> in
             
             let component = Component(name: "FirstComponent", properties: ["first": "value"])
             
-            return try InertiaResponse(component: component, rootView: "index", version: "1.0.0")
-                .toResponse(for: req)
+            return InertiaResponse(component: component, rootView: "index", version: "1.0.0")
+                .encodeResponse(for: req)
         }
     }
     

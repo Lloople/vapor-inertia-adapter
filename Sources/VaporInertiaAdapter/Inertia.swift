@@ -40,14 +40,14 @@ public class Inertia {
         )
     }
     
-    public func render(for request: Request, with component: Component) throws -> EventLoopFuture<Response> {
+    public func render(with component: Component) -> InertiaResponse {
 
         component.properties.merge(self.shared) { (_, shared) in shared }
         
-        return try InertiaResponse(
+        return InertiaResponse(
             component: component,
             rootView: self.rootView,
             version: self.version
-        ).toResponse(for: request)
+        )
     }
 }

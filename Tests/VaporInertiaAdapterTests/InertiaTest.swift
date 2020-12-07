@@ -8,11 +8,11 @@ class InertiaTest: XCTestCase {
     override func setUpWithError() throws {
         app = Application(.testing)
         
-        app.get("test") { req throws -> EventLoopFuture<Response> in
+        app.get("test") { req -> EventLoopFuture<Response> in
             
             let component = Component(name: "MyComponent", properties: ["alive": true])
             
-            return try Inertia.instance().render(for: req, with: component)
+            return Inertia.instance().render(with: component).encodeResponse(for: req)
         }
     }
     
@@ -35,7 +35,7 @@ class InertiaTest: XCTestCase {
         XCTAssertTrue(Inertia.instance().version == "my-version")
     }
     
-    func testContainerCanBeRenderer() throws {
+    func testContainerCanBeRendered() throws {
         let component = Component(name: "Event/Show", properties: ["name": "Climate Change Global Action"])
         let content = try component.toJson()
         let container = Inertia.instance().container(content:content)
