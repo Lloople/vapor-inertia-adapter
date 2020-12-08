@@ -16,7 +16,7 @@ public class Inertia {
         return inertiaInstance
     }
     
-    public func container(content: Data) -> String {
+    public func container(_ content: Data) -> String {
         return "<div id='app' data-page='\(content)'></div>"
     }
     
