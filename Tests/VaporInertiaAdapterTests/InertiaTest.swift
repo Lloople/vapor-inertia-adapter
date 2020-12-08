@@ -35,14 +35,6 @@ class InertiaTest: XCTestCase {
         XCTAssertTrue(Inertia.instance().version == "my-version")
     }
     
-    func testContainerCanBeRendered() throws {
-        let component = Component(name: "Event/Show", properties: ["name": "Climate Change Global Action"])
-        let content = try component.toJson()
-        let container = Inertia.instance().container(content:content)
-        
-        XCTAssertEqual(container, "<div id='app' data-page='\(content)'></div>")
-    }
-    
     func testCanShareVariables() {
         Inertia.instance().share(key: "language", value: "en")
         
