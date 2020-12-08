@@ -1,5 +1,4 @@
 import Vapor
-import Foundation
 
 public struct InertiaMiddleware: Middleware {
     public init() {}
