@@ -16,10 +16,6 @@ public class Inertia {
         return inertiaInstance
     }
     
-    public func container(_ content: Data) -> String {
-        return "<div id='app' data-page='\(content)'></div>"
-    }
-    
     public func share(key: String, value: Encodable) {
         self.shared[key] = value
     }
@@ -29,6 +25,7 @@ public class Inertia {
     }
     
     public func getAllShared() -> [String:Any] {
+        
         return self.shared
     }
     
