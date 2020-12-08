@@ -16,33 +16,50 @@ public class InertiaResponse: ResponseEncodable {
     
     public func encodeResponse(for request: Request) -> EventLoopFuture<Response> {
         
-        guard let json = try? self.component.toJson() else {
+        self.component.properties.merge([
+            "errors": [:],
+            "flash": [
+                "success": nil,
+                "error": nil
+            ],
+            "auth": ["user": nil]
+        ]) { (original, _) in original }
+        
+        guard let context = try? self.getContext(request) else {
             return request.eventLoop.future(self.getErrorResponse())
         }
         
-        let context = InertiaContext(
-            component: json,
-            version: self.version,
-            url: request.url.string
-        )
+        let json = String(data: context, encoding: .utf8) ?? ""
         
-        if request.isInertia() {
-            do {
-                let response: Response = .init(
-                    status: .ok,
-                    headers: .init(self.inertiaHeaders)
-                )
-                
-                try response.content.encode(context, as: .json)
-            
-                return request.eventLoop.future(response)
-            } catch {
-                return request.eventLoop.future(self.getErrorResponse())
-            }
+        if !request.isInertia() {
+            return request.view.render(self.rootView, ["json": json])
+                .flatMap { $0.encodeResponse(for: request) }
         }
         
-        return request.view.render(self.rootView, context)
-            .flatMap { $0.encodeResponse(for: request) }
+        do {
+            let response: Response = .init(
+                status: .ok,
+                headers: .init(self.inertiaHeaders)
+            )
+            
+            try response.content.encode(json, as: .json)
+        
+            return request.eventLoop.future(response)
+        } catch {
+            return request.eventLoop.future(self.getErrorResponse())
+        }
+        
+        
+        
+    }
+    
+    private func getContext(_ request: Request) throws -> Data {
+        return try JSONSerialization.data(withJSONObject: [
+            "component": self.component.getName(),
+            "props": self.component.getProperties(),
+            "version": self.version,
+            "url": request.url.string
+        ])
     }
     
     private func getErrorResponse() -> Response {
