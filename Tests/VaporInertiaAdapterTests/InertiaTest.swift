@@ -10,9 +10,7 @@ class InertiaTest: XCTestCase {
         
         app.get("test") { req -> EventLoopFuture<Response> in
             
-            let component = Component(name: "MyComponent", properties: ["alive": true])
-            
-            return Inertia.instance().render(with: component).encodeResponse(for: req)
+            return self.app.inertia.render("MyComponent", ["alive": true]).encodeResponse(for: req)
         }
     }
     
@@ -21,30 +19,30 @@ class InertiaTest: XCTestCase {
     }
     
     func testSingletonPatternWorks() {
-        let inertia = Inertia.instance()
-        let another = Inertia.instance()
+        let inertia = self.app.inertia
+        let another = self.app.inertia
         
         XCTAssertTrue(inertia === another)
     }
     
     func testVersionCanBeSetFromOutside() {
-        XCTAssertFalse(Inertia.instance().version == "my-version")
+        XCTAssertFalse(self.app.inertia.version == "my-version")
         
-        Inertia.instance().version = "my-version"
+        self.app.inertia.version = "my-version"
         
-        XCTAssertTrue(Inertia.instance().version == "my-version")
+        XCTAssertTrue(self.app.inertia.version == "my-version")
     }
     
     func testCanShareVariables() {
-        Inertia.instance().share(key: "language", value: "en")
+        self.app.inertia.share(key: "language", value: "en")
         
-        XCTAssertEqual(1, Inertia.instance().getAllShared().count)
+        XCTAssertEqual(1, self.app.inertia.getAllShared().count)
         
-        XCTAssertEqual(Inertia.instance().getShared(key: "language") as? String, "en")
+        XCTAssertEqual(self.app.inertia.getShared(key: "language") as? String, "en")
     }
     
     func testCanCreateRedirection() {
-        let response = Inertia.instance().location(url: "https://myurl.com")
+        let response = self.app.inertia.location(url: "https://myurl.com")
         
         XCTAssertEqual(response.status, .conflict)
         XCTAssertEqual(response.headers.first(name:"X-Inertia-Location"), "https://myurl.com")

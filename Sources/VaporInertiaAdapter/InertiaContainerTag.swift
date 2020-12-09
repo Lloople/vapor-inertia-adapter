@@ -7,6 +7,7 @@ public struct InertiaContainerTag: LeafTag {
     public init() {}
     
     public func render(_ ctx: LeafContext) throws -> LeafData {
+        
         guard let json = ctx.parameters[0].string else {
             throw InertiaContainerTagError()
         }
