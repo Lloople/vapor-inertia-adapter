@@ -17,19 +17,21 @@ public class InertiaResponse: ResponseEncodable
         self.version = version
     }
     
-    public func encodeResponse(for request: Request) -> EventLoopFuture<Response>    {
+    public func encodeResponse(for request: Request) -> EventLoopFuture<Response> {
         
 
 //        this is what I need to send to the view or the JSON response
-//        let json: [String:String] = [
-//            "component": self.component,  // String
-//            "props": self.properties,     // Dictionary key:value, can be anything, String for now...
-//            "version": self.version,      // String
-//            "url": request.url.string     //String
-//        ]
+        guard let json = try? JSONEncoder().encode([
+            "component": self.component,  // String
+            "props": "[]",//self.properties,     // Dictionary key:value, can be anything, even dictionaries inside dictionaries, String for now...
+            "version": self.version,      // String
+            "url": request.url.string     //String
+        ]) else {
+            return request.eventLoop.future(self.getErrorResponse())
+        }
         
         if !request.isInertia() {
-            return request.view.render(self.rootView)
+            return request.view.render(self.rootView, ["json": json])
                 .flatMap { $0.encodeResponse(for: request) }
         }
         
@@ -39,7 +41,7 @@ public class InertiaResponse: ResponseEncodable
                 headers: .init(self.inertiaHeaders)
             )
             
-//            try response.content.encode(json, as: .json)
+            try response.content.encode(json, as: .json)
         
             return request.eventLoop.future(response)
         } catch {

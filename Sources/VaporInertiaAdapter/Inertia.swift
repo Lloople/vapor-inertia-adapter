@@ -1,18 +1,12 @@
 import Vapor
 
 public class Inertia {
-    
-    let request: Request
-                    
+                        
     public var rootView: String = "index"
     
     public var version: String = "no-version-configured"
     
     var shared: [String:String] = [:]
-    
-    init(_ request: Request) {
-        self.request = request
-    }
     
     public func setVersion(_ version: String) -> Void {
         self.version = version
