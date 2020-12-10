@@ -10,9 +10,12 @@ class InertiaResponseTest: XCTestCase {
         
         app.get("test") { req -> EventLoopFuture<Response> in
             
-            let component = Component(name: "FirstComponent", properties: ["first": "value"])
-            
-            return InertiaResponse(component: component, rootView: "index", version: "1.0.0")
+            return InertiaResponse(
+                component: "FirstComponent",
+                properties: ["first":"value"],
+                rootView: "index",
+                version: "1.0.0"
+            )
                 .encodeResponse(for: req)
         }
     }

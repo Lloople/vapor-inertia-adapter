@@ -25,6 +25,11 @@ final class InertiaMiddlewareTest: XCTestCase {
         app.put("not-modified") { req -> Response in
             return Response(status: .notModified)
         }
+        
+        app.get("found-testing") { req -> Response in
+            req.inertia.version = "testing"
+            return Response(status: .found)
+        }
     }
     
     override func tearDownWithError() throws {
@@ -69,10 +74,8 @@ final class InertiaMiddlewareTest: XCTestCase {
     }
     
     func testDoesNotReplaceFoundIfTheMethodIsNotCorrect() throws {
-        
-        Inertia.instance().version = "testing"
-        
-        try app.test(.GET, "found", beforeRequest: { request in
+                
+        try app.test(.GET, "found-testing", beforeRequest: { request in
             request.headers.add(name: "X-inertia", value: "1")
             request.headers.add(name: "X-Inertia-Version", value: "testing")
         }, afterResponse: { response in

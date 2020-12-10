@@ -5,13 +5,17 @@ class InertiaTest: XCTestCase {
     
     var app: Application!
     
+    var request: Request!
+    
     override func setUpWithError() throws {
         app = Application(.testing)
         
         app.get("test") { req -> EventLoopFuture<Response> in
             
-            return self.app.inertia.render("MyComponent", ["alive": true]).encodeResponse(for: req)
+            return req.inertia.render("MyComponent", ["alive": "true"]).encodeResponse(for: req)
         }
+        
+        self.request = Request(application: self.app, on: self.app.eventLoopGroup.next())
     }
     
     override func tearDownWithError() throws {
@@ -19,30 +23,31 @@ class InertiaTest: XCTestCase {
     }
     
     func testSingletonPatternWorks() {
-        let inertia = self.app.inertia
-        let another = self.app.inertia
+        
+        let inertia = self.request.inertia
+        let another = self.request.inertia
         
         XCTAssertTrue(inertia === another)
     }
     
     func testVersionCanBeSetFromOutside() {
-        XCTAssertFalse(self.app.inertia.version == "my-version")
+        XCTAssertFalse(self.request.inertia.version == "my-version")
         
-        self.app.inertia.version = "my-version"
+        self.request.inertia.version = "my-version"
         
-        XCTAssertTrue(self.app.inertia.version == "my-version")
+        XCTAssertTrue(self.request.inertia.version == "my-version")
     }
     
     func testCanShareVariables() {
-        self.app.inertia.share(key: "language", value: "en")
+        self.request.inertia.share(key: "language", value: "en")
         
-        XCTAssertEqual(1, self.app.inertia.getAllShared().count)
+        XCTAssertEqual(1, self.request.inertia.getAllShared().count)
         
-        XCTAssertEqual(self.app.inertia.getShared(key: "language") as? String, "en")
+        XCTAssertEqual(self.request.inertia.getAllShared()["language"], "en")
     }
     
     func testCanCreateRedirection() {
-        let response = self.app.inertia.location(url: "https://myurl.com")
+        let response = self.request.inertia.location(url: "https://myurl.com")
         
         XCTAssertEqual(response.status, .conflict)
         XCTAssertEqual(response.headers.first(name:"X-Inertia-Location"), "https://myurl.com")
@@ -56,6 +61,7 @@ class InertiaTest: XCTestCase {
             XCTAssertEqual(response.status, .ok)
             XCTAssertEqual(response.headers.first(name: "Vary"), "Accept")
             XCTAssertEqual(response.headers.first(name: "X-Inertia"), "true")
+            // TODO: Test the body of the response
         })
     }
 }

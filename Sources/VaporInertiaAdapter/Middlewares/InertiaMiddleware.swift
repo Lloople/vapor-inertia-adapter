@@ -7,8 +7,8 @@ public struct InertiaMiddleware: Middleware {
                                 
         return next.respond(to: request).map { response in
             
-            if request.inertiaExpired(version: request.application.inertia.version) {
-                return request.application.inertia.location(url: request.url.string)
+            if request.inertiaExpired(version: request.inertia.version) {
+                return request.inertia.location(url: request.url.string)
             }
             
             if self.shouldChangeRedirectStatusCode(request: request, response: response) {
