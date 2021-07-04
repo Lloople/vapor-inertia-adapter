@@ -26,7 +26,7 @@ public class Inertia {
         self.shared = dict
     }
     
-    public func sharedProps() -> [String:Any] {
+    public func sharedData() -> [String:Any] {
         return self.shared
     }
     
