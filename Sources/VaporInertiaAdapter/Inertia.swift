@@ -1,22 +1,32 @@
 import Vapor
 
 public class Inertia {
-                        
+
+    static let sharedInstance = Inertia()
+
     public var rootView: String = "index"
     
     public var version: String = "no-version-configured"
     
-    var shared: [String:String] = [:]
+    var shared: [String:Any] = [:]
     
+    public static func instance() -> Inertia {
+        return sharedInstance
+    }
+
     public func setVersion(_ version: String) -> Void {
         self.version = version
     }
     
-    public func share(key: String, value: String) -> Void {
+    public func share(key: String, value: Any) -> Void {
         self.shared[key] = value
     }
+
+    public func share(_ dict : [String: Any]) -> Void {
+        self.shared = dict
+    }
     
-    public func getAllShared() -> [String:String] {
+    public func sharedProps() -> [String:Any] {
         return self.shared
     }
     
@@ -28,7 +38,7 @@ public class Inertia {
         )
     }
     
-    public func render(_ name: String, _ properties: [String:String]) -> InertiaResponse
+    public func render(_ name: String, _ properties: [String:Any]) -> InertiaResponse
     {
         var props = properties
         
@@ -40,6 +50,11 @@ public class Inertia {
             rootView: self.rootView,
             version: self.version
         )
+    }
+
+    public func render(_ name: String, _ properties: [String:Any], for req:Request) -> EventLoopFuture<Response>
+    {
+        return self.render(name, properties).encodeResponse(for:req)
     }
     
 }

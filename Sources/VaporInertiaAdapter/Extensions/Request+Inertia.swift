@@ -8,7 +8,7 @@ extension Request {
     
     public var inertia: Inertia {
         if (self.storage[InertiaStorageKey.self] == nil) {
-            self.storage[InertiaStorageKey.self] = Inertia(self)
+            self.storage[InertiaStorageKey.self] = Inertia.instance()
         }
         
         return self.storage[InertiaStorageKey.self]!

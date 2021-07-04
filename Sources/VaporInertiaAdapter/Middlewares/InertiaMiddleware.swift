@@ -4,7 +4,7 @@ public struct InertiaMiddleware: Middleware {
     public init() {}
     
     public func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
-                                
+
         return next.respond(to: request).map { response in
             
             if request.inertiaExpired(version: request.inertia.version) {
