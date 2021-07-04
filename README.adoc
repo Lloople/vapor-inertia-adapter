@@ -84,6 +84,22 @@ Inertia.instance().setVersion("v1.0.1")
 
 Ideally, you should use some kind of hash generated via your assets files, or change it manually in each update of your CSS or JS files. https://laravel-mix.com/[Laravel Mix] is a good choice. A sample helper was provided in _vapor.mix.js_ and _webpack.mix.js_.
 
+### Shared Data
+
+
+Inertia.js Docs: https://inertiajs.com/shared-data
+
+To share data:
+```swift
+// could also be request.instance
+Inertia.instance().share("hello", "world")
+Inertia.instance().share([
+    "hello": "world"
+])
+```
+
+NOTE: `props` will overwrite shared data.
+
 ### app.registerInertia()
 
 An extension is provided to ease the initialization of Inertia.
