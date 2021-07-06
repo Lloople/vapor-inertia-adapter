@@ -162,7 +162,8 @@ The very first request to an Inertia app is just a regular full-page browser req
 
 The adapter uses _Leaf_ to render the _Resources/Views/index.leaf_ and pass the json variable.
 
-Use `#inertia(json)` to render the _Inertia_ root element. 
+Use `#inertia()` to render the _Inertia_ root element. If you want more custom element
+you can use the `json` variable.
 
 ```html
 <div id='app' data-page='\(json)'></div>
@@ -182,7 +183,7 @@ Example `Resources/Views/index.leaf`
   <script src='#mix("/js/app.js")' defer></script>
 </head>
 <body>
-  #inertia(json)
+  #inertia()
 </body>
 </html>
 ```

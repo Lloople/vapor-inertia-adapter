@@ -7,14 +7,11 @@ public struct InertiaContainerTag: LeafTag {
     public init() {}
     
     public func render(_ ctx: LeafContext) throws -> LeafData {
-        
-        if (ctx.parameters.count > 0) {
-            guard let json = ctx.parameters[0].string else {
+        // json is a parameter set in InertiaResponse.swift
+        // contains a serialized json object from the rendered properties
+        guard let json = ctx.data["json"]?.string else {
                 throw InertiaContainerTagError()
-            }
-            return LeafData.string("<div id='app' data-page='\(json)'></div>'")
         }
-
-        return LeafData.string("<div id='app' data-page='{}' data-error='try using #inertia(json)'></div>")
+        return LeafData.string("<div id='app' data-page='\(json)'></div>'")
     }
 }
