@@ -1,10 +1,5 @@
-:toc: macro
-:toclevels: 3
-:ext-relative:
-
 # Vapor Inertia Adapter
 
-++++
 <p align="center">
     <a href="https://vapor.codes">
         <img src="http://img.shields.io/badge/Vapor-4-brightgreen.svg" alt="Vapor Logo">
@@ -19,11 +14,8 @@
         <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License">
     </a>
 </p>
-++++
 
-This package is meant to help you using https://inertiajs.com[Inertia JS] in your Vapor 4 project.
-
-toc::[]
+This package is meant to help you using [Inertia JS](https://inertiajs.com) in your Vapor 4 project.
 
 ## Features
 
@@ -82,7 +74,7 @@ This version token should be configured in **configure.swift**:
 Inertia.instance().setVersion("v1.0.1")
 ```
 
-Ideally, you should use some kind of hash generated via your assets files, or change it manually in each update of your CSS or JS files. https://laravel-mix.com/[Laravel Mix] is a good choice. A sample helper was provided in _vapor.mix.js_ and _webpack.mix.js_.
+Ideally, you should use some kind of hash generated via your assets files, or change it manually in each update of your CSS or JS files. [Laravel Mix](https://laravel-mix.com/) is a good choice. A sample helper was provided in _vapor.mix.js_ and _webpack.mix.js_.
 
 ### Shared Data
 
@@ -162,7 +154,7 @@ public func configure(_ app: Application) throws {
 
 ### Creating responses
 
-This adapter follows the https://inertiajs.com/the-protocol[Inertia Protocol].
+This adapter follows the [Inertia Protocol](https://inertiajs.com/the-protocol).
 
 #### Leaf Rendering
 
@@ -203,13 +195,13 @@ When the server detects the _X-Inertia_ header, instead of responding with a ful
 
 #### Sample Controller
 
-Returning an Inertia Response is as simple as using the `render` function of the `inertia` object inside the request.
+Returning an Inertia Response is as simple as using the `inertiaRender` function of the `request` object.
 
 ```swift
-public func render(_ name: String, _ properties: [String:Any], for req:Request) -> EventLoopFuture<Response>
+public func inertiaRender(_ component: String, _ properties: [String:Any]) -> EventLoopFuture<Response>
 ```
 
-For rendering inside the request object. `request.inertia.render(name, props, for:request)`
+For rendering inside the request object. `request.inertiaRender(component, props)`
 
 ```swift
 
@@ -221,14 +213,12 @@ struct IndexController: RouteCollection {
     }
 
     func index(_ req: Request) -> EventLoopFuture<Response> {
-        return req.inertia.render(
+        return req.inertiaRender(
             // This is a Component stored in Resources/js. You must use Webpack or other bundler 
             // in order to reference the component properly
             "Home/Index", 
             // We pass the properties. All the keys and values must be encodable to a JSON object string
-            [ "hello": "world"], 
-            // We pass the request object
-            for:req
+            [ "hello": "world"]
         )
     }
 }

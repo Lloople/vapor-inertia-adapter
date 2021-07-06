@@ -27,4 +27,8 @@ extension Request {
             && self.isInertia()
             && self.inertiaVersion() != version
     }
+
+    public func inertiaRender(_ component: String, _ properties: [String:Any]) -> EventLoopFuture<Response> {
+        return self.inertia.render(component, properties, for:self)
+    }
 }
