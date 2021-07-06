@@ -41,9 +41,9 @@ class InertiaTest: XCTestCase {
     func testCanShareVariables() {
         self.request.inertia.share(key: "language", value: "en")
         
-        XCTAssertEqual(1, self.request.inertia.getAllShared().count)
+        XCTAssertEqual(1, self.request.inertia.sharedData().count)
         
-        XCTAssertEqual(self.request.inertia.getAllShared()["language"], "en")
+        XCTAssertEqual(self.request.inertia.sharedData()["language"], "en")
     }
     
     func testCanCreateRedirection() {
