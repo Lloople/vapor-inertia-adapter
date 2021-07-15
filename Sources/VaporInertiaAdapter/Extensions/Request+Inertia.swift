@@ -8,7 +8,7 @@ extension Request {
     
     public var inertia: Inertia {
         if (self.storage[InertiaStorageKey.self] == nil) {
-            self.storage[InertiaStorageKey.self] = Inertia(self)
+            self.storage[InertiaStorageKey.self] = Inertia.instance()
         }
         
         return self.storage[InertiaStorageKey.self]!
@@ -26,5 +26,9 @@ extension Request {
         return self.method == .GET
             && self.isInertia()
             && self.inertiaVersion() != version
+    }
+
+    public func inertiaRender(_ component: String, _ properties: [String:Any]) -> EventLoopFuture<Response> {
+        return self.inertia.render(component, properties, for:self)
     }
 }
